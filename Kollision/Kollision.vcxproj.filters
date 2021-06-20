@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Quelldateien">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Headerdateien">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Ressourcendateien">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Naiv">
+      <UniqueIdentifier>{6e2e05d9-e722-40a9-9470-14b9a2c6c215}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AOS SIMD">
+      <UniqueIdentifier>{c5ad4622-4dd9-4767-a91e-9aa9662c8495}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SOA SIMD">
+      <UniqueIdentifier>{7e08ff4c-aca5-4295-8b60-b98741fd8282}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Random Generator">
+      <UniqueIdentifier>{1453840f-cd54-408a-bc3b-cfea259bd548}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Testing">
+      <UniqueIdentifier>{1605027f-1375-4d10-84c3-db0b5ad93b8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Timer">
+      <UniqueIdentifier>{a02141a3-d82c-4bd3-b9d3-f068e3965670}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Kollision.h">
+      <Filter>Naiv</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix4x4.h">
+      <Filter>Naiv</Filter>
+    </ClInclude>
+    <ClInclude Include="OBB.h">
+      <Filter>Naiv</Filter>
+    </ClInclude>
+    <ClInclude Include="Point3D.h">
+      <Filter>Naiv</Filter>
+    </ClInclude>
+    <ClInclude Include="Quaternion.h">
+      <Filter>Naiv</Filter>
+    </ClInclude>
+    <ClInclude Include="Vektor3D.h">
+      <Filter>Naiv</Filter>
+    </ClInclude>
+    <ClInclude Include="SIMDKollision.h">
+      <Filter>AOS SIMD</Filter>
+    </ClInclude>
+    <ClInclude Include="SIMDOBB.h">
+      <Filter>AOS SIMD</Filter>
+    </ClInclude>
+    <ClInclude Include="SIMDPoint3D.h">
+      <Filter>AOS SIMD</Filter>
+    </ClInclude>
+    <ClInclude Include="SIMDVektor3D.h">
+      <Filter>AOS SIMD</Filter>
+    </ClInclude>
+    <ClInclude Include="RandomGenerator.h">
+      <Filter>Random Generator</Filter>
+    </ClInclude>
+    <ClInclude Include="Naiv_Testing.h">
+      <Filter>Testing</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="AOS_SIMD_Testing.h">
+      <Filter>Testing</Filter>
+    </ClInclude>
+    <ClInclude Include="SoAOBB.h">
+      <Filter>SOA SIMD</Filter>
+    </ClInclude>
+    <ClInclude Include="SIMDQuaternion.h">
+      <Filter>AOS SIMD</Filter>
+    </ClInclude>
+    <ClInclude Include="SOA_SIMD_Testing.h">
+      <Filter>Testing</Filter>
+    </ClInclude>
+    <ClInclude Include="SoAKollision.h">
+      <Filter>SOA SIMD</Filter>
+    </ClInclude>
+    <ClInclude Include="Durchdringungstiefe.h">
+      <Filter>Naiv</Filter>
+    </ClInclude>
+    <ClInclude Include="SIMDDurchdringungstiefe.h">
+      <Filter>AOS SIMD</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
