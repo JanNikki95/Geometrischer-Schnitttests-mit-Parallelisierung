@@ -179,6 +179,7 @@ void SoA_OBB_Test_1vAll(const SIMDOBB& a, const OBBs& b, float* results) {
 		__m256 res4_1 = _mm256_and_ps(res3_1, res3_2);
 
 		_mm256_store_ps(results + i, res4_1);
+		
 	}
 	for (; i < b.length; ++i) {
 
@@ -190,7 +191,7 @@ void SoA_OBB_Test_1vAll(const SIMDOBB& a, const OBBs& b, float* results) {
 			b.ex[i], b.ey[i], b.ez[i]
 		);
 
-		if (TestOBBOBB_V5(a, temp)) {
+		if (TestOBBOBB_V4(a, temp)) {
 			results[i] = float_true;
 		}
 		else {

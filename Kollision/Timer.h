@@ -8,8 +8,8 @@ using std::chrono::duration_cast;
 using std::chrono::duration;
 using namespace std::chrono_literals;
 
-#define ITERATIONS 1000
-#define TIME    1s
+#define ITERATIONS 100
+#define TIME    100ms
 
 #define TIMERSTART(label)                                                  \
         std::chrono::time_point<std::chrono::system_clock> a##label, b##label; \

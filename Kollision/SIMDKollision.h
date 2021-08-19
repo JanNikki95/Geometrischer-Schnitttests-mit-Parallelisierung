@@ -903,7 +903,7 @@ bool TestOBBOBB_V4(const SIMDOBB_V2& a, const SIMDOBB_V2& b) {
 // OBBs mit Quaternions
 bool TestOBBOBB_V4(const SIMDOBB_V4& a, const SIMDOBB_V4& b) {
 	SIMDVektor3D D = a.center() - b.center();
-
+	
 	float Sxx;	float Syx; float Szx;
 	float Sxy;	float Syy; float Szy;
 	float Sxz;	float Syz; float Szz;
@@ -913,7 +913,7 @@ bool TestOBBOBB_V4(const SIMDOBB_V4& a, const SIMDOBB_V4& b) {
 
 	Matrix4x4 a_mat = toMatrix(a.orientation());
 	Matrix4x4 b_mat = toMatrix(b.orientation());
-
+	
 	SIMDVektor3D a_ux(a_mat[0][0], a_mat[1][0], a_mat[2][0]);
 	SIMDVektor3D a_uy(a_mat[0][1], a_mat[1][1], a_mat[2][1]);
 	SIMDVektor3D a_uz(a_mat[0][2], a_mat[1][2], a_mat[2][2]);

@@ -5,189 +5,256 @@
 #include "RandomGenerator.h"
 #include "Timer.h"
 
-void Naive_Testing_1vAll_V1(int64_t num_entries, bool parallel) {
+void Naive_Testing_1vAll_V1(int64_t num_entries, bool parallel, std::chrono::duration<double>& time, float& colproperty) {
 	std::unique_ptr<bool[]> res = std::make_unique<bool[]>(num_entries);
 	OBB testbox = random_OBB();
 	std::vector<OBB> testboxes = random_OBBs(num_entries);
 
-	TIMERSTARTITERATIONS(OBBOBB_1vAll_V1, ITERATIONS)
+	std::chrono::duration<double> elapsedTime = std::chrono::microseconds(0);
+	std::chrono::time_point<std::chrono::system_clock> a = std::chrono::system_clock::now();
 	#pragma omp parallel for if(parallel)
 	for (int64_t i = 0; i < num_entries; ++i) {
 		res[i] = TestOBBOBB_V1(testbox, testboxes[i]);
 	}
-	TIMERSTOPITERATIONS(OBBOBB_1vAll_V1, ITERATIONS)
+	std::chrono::time_point<std::chrono::system_clock> b = std::chrono::system_clock::now();
 
-	int64_t	count = 0;
+	time += b - a;
+
+	int64_t count = 0;
 	for (int64_t i = 0; i < num_entries; ++i) {
 		if (res[i]) {
 			++count;
 		}
 	}
-	std::cout << "Prozentualer Anteil der Kollision: " << (100.0 / (double)num_entries) * (double)count << '\n';
-
-	std::cout << '\n';
+	colproperty += (100.0 / (float)num_entries) * (float)count;
 }
 
-void Naive_Testing_1vAll_V2(int64_t num_entries, bool parallel) {
+void Naive_Testing_1vAll_V1(int64_t num_entries, bool parallel) {
+	float colproperty = 0.0f;
+	std::chrono::duration<double> time = std::chrono::microseconds(0);
+	for (int i = 0; i < ITERATIONS; ++i) {
+		Naive_Testing_1vAll_V1(num_entries, parallel, time, colproperty);
+	}
+	auto elapsedTime = duration_cast<std::chrono::microseconds>(time);
+	std::cout << "elapsed time (Naive_OBBOBB_1vAll_V1): " << elapsedTime.count() / (double)(ITERATIONS) << "mu" << std::endl;
+	std::cout << "Kollisionswahrscheinlichkeit: " << colproperty / (float)ITERATIONS << std::endl;
+}
+
+
+void Naive_Testing_1vAll_V2(int64_t num_entries, bool parallel, std::chrono::duration<double>& time, float& colproperty) {
+	std::unique_ptr<bool[]> res = std::make_unique<bool[]>(num_entries);
 	OBB testbox = random_OBB();
 	std::vector<OBB> testboxes = random_OBBs(num_entries);
-	std::unique_ptr<bool[]> res = std::make_unique<bool[]>(num_entries);
 
-	TIMERSTARTITERATIONS(OBBOBB_1vAll_V2, ITERATIONS)
+	std::chrono::duration<double> elapsedTime = std::chrono::microseconds(0);
+	std::chrono::time_point<std::chrono::system_clock> a = std::chrono::system_clock::now();
 	#pragma omp parallel for if(parallel)
 	for (int64_t i = 0; i < num_entries; ++i) {
 		res[i] = TestOBBOBB_V2(testbox, testboxes[i]);
 	}
-	TIMERSTOPITERATIONS(OBBOBB_1vAll_V2, ITERATIONS)
+	std::chrono::time_point<std::chrono::system_clock> b = std::chrono::system_clock::now();
 
-	int64_t	count = 0;
+	time += b - a;
+
+	int64_t count = 0;
 	for (int64_t i = 0; i < num_entries; ++i) {
 		if (res[i]) {
 			++count;
 		}
 	}
-	std::cout << "Prozentualer Anteil der Kollision: " << (100.0 / (double)num_entries) * (double)count << '\n';
+	colproperty += (100.0 / (float)num_entries) * (float)count;
+}
 
-	std::cout << '\n';
+void Naive_Testing_1vAll_V2(int64_t num_entries, bool parallel) {
+	float colproperty = 0.0f;
+	std::chrono::duration<double> time = std::chrono::microseconds(0);
+	for (int i = 0; i < ITERATIONS; ++i) {
+		Naive_Testing_1vAll_V2(num_entries, parallel, time, colproperty);
+	}
+	auto elapsedTime = duration_cast<std::chrono::microseconds>(time);
+	std::cout << "elapsed time (Naive_OBBOBB_1vAll_V2): " << elapsedTime.count() / (double)(ITERATIONS) << "mu" << std::endl;
+	std::cout << "Kollisionswahrscheinlichkeit: " << colproperty / (float)ITERATIONS << std::endl;
+}
 
+
+void Naive_Testing_1vAll_V3(int64_t num_entries, bool parallel, std::chrono::duration<double>& time, float& colproperty) {
+	std::unique_ptr<bool[]> res = std::make_unique<bool[]>(num_entries);
+	OBB testbox = random_OBB();
+	std::vector<OBB> testboxes = random_OBBs(num_entries);
+
+	std::chrono::duration<double> elapsedTime = std::chrono::microseconds(0);
+	std::chrono::time_point<std::chrono::system_clock> a = std::chrono::system_clock::now();
+	#pragma omp parallel for if(parallel)
+	for (int64_t i = 0; i < num_entries; ++i) {
+		res[i] = TestOBBOBB_V3(testbox, testboxes[i]);
+	}
+	std::chrono::time_point<std::chrono::system_clock> b = std::chrono::system_clock::now();
+
+	time += b - a;
+
+	int64_t count = 0;
+	for (int64_t i = 0; i < num_entries; ++i) {
+		if (res[i]) {
+			++count;
+		}
+	}
+	colproperty += (100.0 / (float)num_entries) * (float)count;
 }
 
 void Naive_Testing_1vAll_V3(int64_t num_entries, bool parallel) {
-	OBB testbox = random_OBB();
-	std::vector<OBB> testboxes = random_OBBs(num_entries);
-	std::unique_ptr<bool[]> res = std::make_unique<bool[]>(num_entries);
-
-	TIMERSTARTITERATIONS(OBBOBB_1vAll_V3, ITERATIONS)
-	#pragma omp parallel for if(parallel)
-		for (int64_t i = 0; i < num_entries; ++i) {
-			res[i] = TestOBBOBB_V3(testbox, testboxes[i]);
-		}
-	TIMERSTOPITERATIONS(OBBOBB_1vAll_V3, ITERATIONS)
-
-	int64_t	count = 0;
-	for (int64_t i = 0; i < num_entries; ++i) {
-		if (res[i]) {
-			++count;
-		}
+	float colproperty = 0.0f;
+	std::chrono::duration<double> time = std::chrono::microseconds(0);
+	for (int i = 0; i < ITERATIONS; ++i) {
+		Naive_Testing_1vAll_V3(num_entries, parallel, time, colproperty);
 	}
-	std::cout << "Prozentualer Anteil der Kollision: " << (100.0 / (double)num_entries) * (double)count << '\n';
-
-	std::cout << '\n';
-
+	auto elapsedTime = duration_cast<std::chrono::microseconds>(time);
+	std::cout << "elapsed time (Naive_OBBOBB_1vAll_V3): " << elapsedTime.count() / (double)(ITERATIONS) << "mu" << std::endl;
+	std::cout << "Kollisionswahrscheinlichkeit: " << colproperty / (float)ITERATIONS << std::endl;
 }
 
-void Naive_Testing_1vAll_V4(int64_t num_entries, bool parallel) {
+
+void Naive_Testing_1vAll_V4(int64_t num_entries, bool parallel, std::chrono::duration<double>& time, float& colproperty) {
+	std::unique_ptr<bool[]> res = std::make_unique<bool[]>(num_entries);
 	OBB testbox = random_OBB();
 	std::vector<OBB> testboxes = random_OBBs(num_entries);
-	std::unique_ptr<bool[]> res = std::make_unique<bool[]>(num_entries);
 
-	TIMERSTARTITERATIONS(OBBOBB_1vAll_V4, ITERATIONS)
+	std::chrono::duration<double> elapsedTime = std::chrono::microseconds(0);
+	std::chrono::time_point<std::chrono::system_clock> a = std::chrono::system_clock::now();
 	#pragma omp parallel for if(parallel)
 	for (int64_t i = 0; i < num_entries; ++i) {
 		res[i] = TestOBBOBB_V4(testbox, testboxes[i]);
 	}
-	TIMERSTOPITERATIONS(OBBOBB_1vAll_V4, ITERATIONS)
+	std::chrono::time_point<std::chrono::system_clock> b = std::chrono::system_clock::now();
 
-		int64_t	count = 0;
+	time += b - a;
+
+	int64_t count = 0;
 	for (int64_t i = 0; i < num_entries; ++i) {
 		if (res[i]) {
 			++count;
 		}
 	}
-	std::cout << "Prozentualer Anteil der Kollision: " << (100.0 / (double)num_entries) * (double)count << '\n';
-
-	std::cout << '\n';
+	colproperty += (100.0 / (float)num_entries) * (float)count;
 }
 
-void Naive_Testing_1vAll_V5(int64_t num_entries, bool parallel) {
+void Naive_Testing_1vAll_V4(int64_t num_entries, bool parallel) {
+	float colproperty = 0.0f;
+	std::chrono::duration<double> time = std::chrono::microseconds(0);
+	for (int i = 0; i < ITERATIONS; ++i) {
+		Naive_Testing_1vAll_V4(num_entries, parallel, time, colproperty);
+	}
+	auto elapsedTime = duration_cast<std::chrono::microseconds>(time);
+	std::cout << "elapsed time (Naive_OBBOBB_1vAll_V4): " << elapsedTime.count() / (double)(ITERATIONS) << "mu" << std::endl;
+	std::cout << "Kollisionswahrscheinlichkeit: " << colproperty / (float)ITERATIONS << std::endl;
+}
+
+
+void Naive_Testing_1vAll_V5(int64_t num_entries, bool parallel, std::chrono::duration<double>& time, float& colproperty) {
+	std::unique_ptr<bool[]> res = std::make_unique<bool[]>(num_entries);
 	OBB testbox = random_OBB();
 	std::vector<OBB> testboxes = random_OBBs(num_entries);
-	std::unique_ptr<bool[]> res = std::make_unique<bool[]>(num_entries);
 
-	TIMERSTARTITERATIONS(OBBOBB_1vAll_V5, ITERATIONS)
-	#pragma omp parallel for if(parallel)
+	std::chrono::duration<double> elapsedTime = std::chrono::microseconds(0);
+	std::chrono::time_point<std::chrono::system_clock> a = std::chrono::system_clock::now();
+#pragma omp parallel for if(parallel)
 	for (int64_t i = 0; i < num_entries; ++i) {
 		res[i] = TestOBBOBB_V5(testbox, testboxes[i]);
 	}
-	TIMERSTOPITERATIONS(OBBOBB_1vAll_V5, ITERATIONS)
+	std::chrono::time_point<std::chrono::system_clock> b = std::chrono::system_clock::now();
 
-		int64_t	count = 0;
+	time += b - a;
+
+	int64_t count = 0;
 	for (int64_t i = 0; i < num_entries; ++i) {
 		if (res[i]) {
 			++count;
 		}
 	}
-	std::cout << "Prozentualer Anteil der Kollision: " << (100.0 / (double)num_entries) * (double)count << '\n';
-
-	std::cout << '\n';
+	colproperty += (100.0 / (float)num_entries) * (float)count;
 }
 
-void Naive_Testing_1vAll_V6(int64_t num_entries, bool parallel) {
-	OBB testbox = random_OBB();
-	std::vector<OBB> testboxes = random_OBBs(num_entries);
-	std::unique_ptr<bool[]> res = std::make_unique<bool[]>(num_entries);
-
-	TIMERSTARTITERATIONS(OBBOBB_1vAll_V6, ITERATIONS)
-	#pragma omp parallel for if(parallel)
-	for (int64_t i = 0; i < num_entries; ++i) {
-		res[i] = TestOBBOBB_V6(testbox, testboxes[i]);
+void Naive_Testing_1vAll_V5(int64_t num_entries, bool parallel) {
+	float colproperty = 0.0f;
+	std::chrono::duration<double> time = std::chrono::microseconds(0);
+	for (int i = 0; i < ITERATIONS; ++i) {
+		Naive_Testing_1vAll_V5(num_entries, parallel, time, colproperty);
 	}
-	TIMERSTOPITERATIONS(OBBOBB_1vAll_V6, ITERATIONS)
-
-	int64_t	count = 0;
-	for (int64_t i = 0; i < num_entries; ++i) {
-		if (res[i]) {
-			++count;
-		}
-	}
-	std::cout << "Prozentualer Anteil der Kollision: " << (100.0 / (double)num_entries) * (double)count << '\n';
-
-	std::cout << '\n';
+	auto elapsedTime = duration_cast<std::chrono::microseconds>(time);
+	std::cout << "elapsed time (Naive_OBBOBB_1vAll_V5): " << elapsedTime.count() / (double)(ITERATIONS) << "mu" << std::endl;
+	std::cout << "Kollisionswahrscheinlichkeit: " << colproperty / (float)ITERATIONS << std::endl;
 }
 
-void Naive_Testing_1vAll_OBBV2(int64_t num_entries, bool parallel) {
+
+void Naive_Testing_1vAll_OBBV2(int64_t num_entries, bool parallel, std::chrono::duration<double>& time, float& colproperty) {
 	OBB_V2 testbox = random_OBB_V2();
 	std::vector<OBB_V2> testboxes = random_OBBs_V2(num_entries);
 	std::unique_ptr<bool[]> res = std::make_unique<bool[]>(num_entries);
 
-	TIMERSTARTITERATIONS(OBBOBB_1vAll_V4_OBB_V2, ITERATIONS)
+	std::chrono::duration<double> elapsedTime = std::chrono::microseconds(0);
+	std::chrono::time_point<std::chrono::system_clock> a = std::chrono::system_clock::now();
 	#pragma omp parallel for if(parallel)
 	for (int64_t i = 0; i < num_entries; ++i) {
 		res[i] = TestOBBOBB_V4(testbox, testboxes[i]);
 	}
-	TIMERSTOPITERATIONS(OBBOBB_1vAll_V4_OBB_V2, ITERATIONS)
+	std::chrono::time_point<std::chrono::system_clock> b = std::chrono::system_clock::now();
 
-		int64_t count = 0;
+	time += b - a;
+
+	int64_t count = 0;
 	for (int64_t i = 0; i < num_entries; ++i) {
 		if (res[i]) {
 			++count;
 		}
 	}
-	std::cout << "Prozentualer Anteil der Kollision: " << (100.0 / (double)num_entries) * (double)count << '\n';
-	std::cout << '\n';
+	colproperty += (100.0 / (float)num_entries) * (float)count;
 }
 
-void Naive_Testing_1vAll_OBBV4(int64_t num_entries, bool parallel) {
+void Naive_Testing_1vAll_OBBV2(int64_t num_entries, bool parallel) {
+	float colproperty = 0.0f;
+	std::chrono::duration<double> time = std::chrono::microseconds(0);
+	for (int i = 0; i < ITERATIONS; ++i) {
+		Naive_Testing_1vAll_OBBV2(num_entries, parallel, time, colproperty);
+	}
+	auto elapsedTime = duration_cast<std::chrono::microseconds>(time);
+	std::cout << "elapsed time (Naive_Testing_1vAll_OBBV2): " << elapsedTime.count() / (double)(ITERATIONS) << "mu" << std::endl;
+	std::cout << "Kollisionswahrscheinlichkeit: " << colproperty / (float)ITERATIONS << std::endl;
+}
+
+
+void Naive_Testing_1vAll_OBBV4(int64_t num_entries, bool parallel, std::chrono::duration<double>& time, float& colproperty) {
 	OBB_V4 testbox = random_OBB_V4();
 	std::vector<OBB_V4> testboxes = random_OBBs_V4(num_entries);
 	std::unique_ptr<bool[]> res = std::make_unique<bool[]>(num_entries);
 
-	TIMERSTARTITERATIONS(OBBOBB_1vAll_V4_OBB_V4, ITERATIONS)
+	std::chrono::duration<double> elapsedTime = std::chrono::microseconds(0);
+	std::chrono::time_point<std::chrono::system_clock> a = std::chrono::system_clock::now();
 	#pragma omp parallel for if(parallel)
 	for (int64_t i = 0; i < num_entries; ++i) {
 		res[i] = TestOBBOBB_V4(testbox, testboxes[i]);
 	}
-	TIMERSTOPITERATIONS(OBBOBB_1vAll_V4_OBB_V4, ITERATIONS)
+	std::chrono::time_point<std::chrono::system_clock> b = std::chrono::system_clock::now();
+	time += b - a;
 
-	int64_t	count = 0;
+	int64_t count = 0;
 	for (int64_t i = 0; i < num_entries; ++i) {
 		if (res[i]) {
 			++count;
 		}
 	}
-	std::cout << "Prozentualer Anteil der Kollision: " << (100.0 / (double)num_entries) * (double)count << '\n';
-	std::cout << '\n';
+	colproperty += (100.0 / (float)num_entries) * (float)count;
 }
+
+void Naive_Testing_1vAll_OBBV4(int64_t num_entries, bool parallel) {
+	float colproperty = 0.0f;
+	std::chrono::duration<double> time = std::chrono::microseconds(0);
+	for (int i = 0; i < ITERATIONS; ++i) {
+		Naive_Testing_1vAll_OBBV4(num_entries, parallel, time, colproperty);
+	}
+	auto elapsedTime = duration_cast<std::chrono::microseconds>(time);
+	std::cout << "elapsed time (Naive_Testing_1vAll_OBBV4): " << elapsedTime.count() / (double)(ITERATIONS) << "mu" << std::endl;
+	std::cout << "Kollisionswahrscheinlichkeit: " << colproperty / (float)ITERATIONS << std::endl;
+}
+
 
 
 void Naive_Durchsatz_V1() {
@@ -198,7 +265,7 @@ void Naive_Durchsatz_V1() {
 
 
 	int counter = 0;
-	std::chrono::duration<long long> duration = TIME;
+	auto duration = TIME;
 	std::chrono::time_point<std::chrono::system_clock> start = std::chrono::system_clock::now();
 
 	do {
@@ -218,7 +285,7 @@ void Naive_Durchsatz_V2() {
 
 
 	int counter = 0;
-	std::chrono::duration<long long> duration = TIME;
+	auto duration = TIME;
 	std::chrono::time_point<std::chrono::system_clock> start = std::chrono::system_clock::now();
 
 	do {
@@ -238,7 +305,7 @@ void Naive_Durchsatz_V3() {
 
 
 	int counter = 0;
-	std::chrono::duration<long long> duration = TIME;
+	auto duration = TIME;
 	std::chrono::time_point<std::chrono::system_clock> start = std::chrono::system_clock::now();
 
 	do {
@@ -258,7 +325,7 @@ void Naive_Durchsatz_V4() {
 
 
 	int64_t counter = 0;
-	std::chrono::duration<long long> duration = TIME;
+	auto duration = TIME;
 	std::chrono::time_point<std::chrono::system_clock> start = std::chrono::system_clock::now();
     
 	do {
@@ -278,7 +345,7 @@ void Naive_Durchsatz_V5 () {
 
 
 	int64_t counter = 0;
-	std::chrono::duration<long long> duration = TIME;
+	auto duration = TIME;
 	std::chrono::time_point<std::chrono::system_clock> start = std::chrono::system_clock::now();
 
 	do {
@@ -298,7 +365,7 @@ void Naive_Durchsatz_OBBV2() {
 
 
 	int64_t counter = 0;
-	std::chrono::duration<long long> duration = TIME;
+	auto duration = TIME;
 	std::chrono::time_point<std::chrono::system_clock> start = std::chrono::system_clock::now();
 
 	do {
@@ -318,7 +385,7 @@ void Naive_Durchsatz_OBBV4() {
 
 
 	int64_t counter = 0;
-	std::chrono::duration<long long> duration = TIME;
+	auto duration = TIME;
 	std::chrono::time_point<std::chrono::system_clock> start = std::chrono::system_clock::now();
 
 	do {

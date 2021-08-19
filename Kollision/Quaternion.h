@@ -266,7 +266,7 @@ Quaternion inverse(Quaternion q) {
 	);
 }
 
-Matrix4x4 toMatrix(Quaternion q) {
+ Matrix4x4 toMatrix(Quaternion q) {
 	float ww = q.w() * q.w();
 	float xx = q.x() * q.x();
 	float yy = q.y() * q.y();

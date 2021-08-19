@@ -3,6 +3,7 @@
 #include "Point3D.h"
 #include "Vektor3D.h"
 #include "OBB.h"
+#include <immintrin.h>
 
 // Reines Seperating Axis Theorem
 bool TestOBBOBB_V1(const OBB& a, const OBB& b) {
@@ -911,9 +912,10 @@ bool TestOBBOBB_V4(const OBB_V4& a, const OBB_V4& b) {
 
 	float Dax, Day, Daz;
 	float Dbx, Dby, Dbz;
-
+	_mm256_zeroall();
 	Matrix4x4 a_mat = toMatrix(a.orientation());
 	Matrix4x4 b_mat = toMatrix(b.orientation());
+	_mm256_zeroall();
 
 	Vektor3D a_ux(a_mat[0][0], a_mat[1][0], a_mat[2][0]);
 	Vektor3D a_uy(a_mat[0][1], a_mat[1][1], a_mat[2][1]);

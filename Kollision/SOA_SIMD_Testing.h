@@ -3,7 +3,7 @@
 #include "SoAKollision.h"
 #include "Timer.h"
 
-void SOA_SIMD_Testing_1vAll(int64_t num_entries) {
+void SOA_SIMD_Testing_1vAll(int64_t num_entries, std::chrono::duration<double>& time, float& colproperty) {
 	SIMDOBB testbox = random_SIMDOBB();
 
 	OBBs testboxes(num_entries);
@@ -11,19 +11,32 @@ void SOA_SIMD_Testing_1vAll(int64_t num_entries) {
 
 	std::vector<float> results(num_entries);
 
-	TIMERSTARTITERATIONS(SOA_OBBOBB_1vAll, ITERATIONS)
+	std::chrono::duration<double> elapsedTime = std::chrono::microseconds(0);
+	std::chrono::time_point<std::chrono::system_clock> a = std::chrono::system_clock::now();
 	SoA_OBB_Test_1vAll(testbox, testboxes, results.data());
-	TIMERSTOPITERATIONS(SOA_OBBOBB_1vAll, ITERATIONS)
+	std::chrono::time_point<std::chrono::system_clock> b = std::chrono::system_clock::now();
+
+	time += b - a;
 
 	int64_t count = 0;
 	for (int64_t i = 0; i < num_entries; ++i) {
-		if (results[i] == float_true) {
-			count += 1;
+		bool res = std::isnan(results[i]) ? true : false;
+		if (res) {
+			++count;
 		}
 	}
-	std::cout << "Prozentualer Anteil der Kollision: " << (100.0 / (double)num_entries) * (double)count << '\n';
+	colproperty += (100.0 / (float)num_entries) * (float)count;
+}
 
-	std::cout << '\n';
+void SOA_SIMD_Testing_1vAll(int64_t num_entries) {
+	float colproperty = 0.0f;
+	std::chrono::duration<double> time = std::chrono::microseconds(0);
+	for (int i = 0; i < ITERATIONS; ++i) {
+		SOA_SIMD_Testing_1vAll(num_entries, time, colproperty);
+	}
+	auto elapsedTime = duration_cast<std::chrono::microseconds>(time);
+	std::cout << "elapsed time (SOA_SIMD_Testing_1vAll): " << elapsedTime.count() / (double)(ITERATIONS) << "mu" << std::endl;
+	std::cout << "Kollisionswahrscheinlichkeit: " << colproperty / (float)ITERATIONS << std::endl;
 }
 
 void SOA_SIMD_Testing_1v1(int64_t num_entries) {
@@ -52,7 +65,7 @@ void SOA_SIMD_Testing_1v1(int64_t num_entries) {
 }
 
 void SOA_SIMD_Durchsatz() {
-	int64_t num_entries = 1 << 25;
+	int64_t num_entries = 1 << 24;
 
 	SIMDOBB a = random_SIMDOBB();
 	OBBs b(num_entries);
@@ -62,7 +75,7 @@ void SOA_SIMD_Durchsatz() {
 	float* results = results_vector.data();
 
 	int64_t i = 0;
-	std::chrono::duration<long long> duration = TIME;
+	auto duration = TIME;
 	std::chrono::time_point<std::chrono::system_clock> start = std::chrono::system_clock::now();
 
 	__m256 cx_a = _mm256_set1_ps(a.center().x());
@@ -243,6 +256,6 @@ void SOA_SIMD_Durchsatz() {
 		i += 8;
 	} while ((std::chrono::system_clock::now() - start) < duration && i < num_entries);
 
-	std::cout << "Durchsatz für naiven V5 OBBOBB-Schnitttest\n";
+	std::cout << "Durchsatz für SoA SIMD Schnitttest\n";
 	std::cout << "Counter: " << i << '\n';
 }

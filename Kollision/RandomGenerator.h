@@ -8,7 +8,7 @@
 #include "SoAOBB.h"
 
 #define SPACE -1'000.0f, 1'000.0f
-#define BOXSIZE 3000.0f, 4000.0f
+#define BOXSIZE 3000.0f, 5000.0f
 
 Matrix4x4 randomRotation() {
 
